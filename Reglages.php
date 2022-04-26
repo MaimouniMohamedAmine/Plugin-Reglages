@@ -26,6 +26,10 @@ function settings_plugin()
     add_action('admin_menu','settings_plugin');
  function main_form()
  {
+    $radio_btn_Nom = '';   
+     if(get_option("radio_btn_Nom")){
+        $radio_btn_Nom = 'checked';
+     }
     //$content = get_option( 'siteurl' );
     //$editor_id = 'id';//I don't know why it works as it does not refer to anything according to wp_editor documentation. Is it the first instantiation??
     //wp_editor($content,'id');
@@ -46,9 +50,9 @@ function settings_plugin()
                        <input name="wp_contact_nom"type="text">
                     </td>
                     <td>
-                       <input value="true" name="radio_btn_Nom" type="radio">
+                       <input value="true" name="radio_btn_Nom" type="radio"'.$radio_btn_Nom.'>
                        <label for="">Activer</label>
-                       <input value="false" name="radio_btn_Nom" type="radio" checked>
+                       <input value="false" name="radio_btn_Nom" type="radio" >
                        <label for="">Désactiver</label>
                     </td>
                </tr>
@@ -120,24 +124,27 @@ function settings_plugin()
    </div>
 </form>';
 //Setting submit button to update the values inside the text editor
-$option = 'wp_main_form';
+$a = get_option( 'wp_main_form' );
+        print_r($a);
 if (isset($_POST['submit_btn_name']))  
 {
+                   //option name  | 
     update_option('radio_btn_Nom',$_POST['radio_btn_Nom']);
     update_option('radio_btn_Prenom',$_POST['radio_btn_Prenom']);
     update_option('radio_btn_Date',$_POST['radio_btn_Date']);
     update_option('radio_btn_Email',$_POST['radio_btn_Email']);
     update_option('radio_btn_Numero',$_POST['radio_btn_Numero']);
     update_option('radio_btn_Message',$_POST['radio_btn_Message']);
-
+    $value_radio_btn = $_POST['radio_btn_Nom'];
+    
 }
  }
 //Return value function
- function return_value()
- {
-    echo get_option('wp_main_form');
- }
-  add_shortcode('return','return_value');
+//  function return_value()
+//  {
+//     echo get_option('wp_main_form');
+//  }
+ // add_shortcode('return','return_value');
  //Submenu function
 //  function admin_menu_sub_archive()
 // {
@@ -157,3 +164,6 @@ if (isset($_POST['submit_btn_name']))
         color:#fff;
       }
    </style>
+<script>
+    
+</script>
