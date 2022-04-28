@@ -2,29 +2,14 @@
 /**
  * Plugin Name: Settings Plugin
  * Author: Maimouni
- * Version: 1.1.0
+ * Version: 2.0.0
  */
-// $servername = "localhost";
-// $username = "user";
-// $password = "admin";
-
-// // Create connection
-// $conn = new mysqli($servername, $username, $password);
-
-// // Check connection
-// if ($conn->connect_error) {
-//   die("Connection failed: " . $conn->connect_error);
-// }
-// echo "Connected successfully";
-// error_reporting(0);
-//Setting;s plugin
-function settings_plugin()
+function reglages_plugin()
 {
-    add_menu_page('Settings','Réglages','manage_options','Amine-admin-menu','main_form','dashicons-menu-alt3',6);
-    // add_submenu_page('Amine-admin-menu','Archived Submissions','Sous-menu','manage_options','admin-menu-sub-archive','admin_menu_sub_archive');
+    add_menu_page('Settings','Réglages','manage_options','Amine-admin-menu','form_principale','dashicons-menu-alt3',6);
 }
-    add_action('admin_menu','settings_plugin');
- function main_form()
+    add_action('admin_menu','reglages_plugin');
+ function form_principale()
  {
 
 //Saving data into database & keeping it 
@@ -166,7 +151,7 @@ function settings_plugin()
                <tr>
                    <td>
                        <label for="">Message</label><br>
-                       <input name="wp_contact_message"type="text">
+                       <textarea name="wp_contact_message"type="text"></textarea>
                    </td>
                    <td>
                        <input value="true" name="radio_btn_Message" type="radio" '.$radio_btn_Message.'>
@@ -183,10 +168,10 @@ function settings_plugin()
    </div>
 </form>';
 }
-//Setting submit button to update the values inside the text editor
+//Setting submit button to update the values of the radio buttons
     if (isset($_POST['submit_btn_name']))  
     {
-                       //option name  | 
+                       //option name  | option value
         update_option('radio_btn_Nom',$_POST['radio_btn_Nom']);
         update_option('radio_btn_Prenom',$_POST['radio_btn_Prenom']);
         update_option('radio_btn_Date',$_POST['radio_btn_Date']);
@@ -194,27 +179,61 @@ function settings_plugin()
         update_option('radio_btn_Numero',$_POST['radio_btn_Numero']);
         update_option('radio_btn_Message',$_POST['radio_btn_Message']);
 
-        echo '<div class="updated"> The operation was completed successfully!!!!</div>';
+        echo '<div class="updated"> The operation was completed successfully!</div>';
         
     }
-//Return value function
-//  function return_value()
-//  {
-//     echo get_option('wp_main_form');
-//  }
- // add_shortcode('return','return_value');
- //Submenu function
-//  function admin_menu_sub_archive()
-// {
-//     echo'<div class="wrap"><b>Ceci est une page Sous-menu</b> </div>';
-// }
+//Show inputs upon admin selection
+function affichage_inputs()
+{
+    $form = '<form method="POST" action="">';
+    if(get_option('radio_btn_Nom') == 'true')
+    {
+        $form .='<label for="">Nom</label><br>';
+        $form .='<input name="wp_contact_nom" type="text">';
+    }
+    if(get_option('radio_btn_Prenom') == 'true')
+    {
+        $form .='<br><label for=""> Prénom</label><br>';
+        $form .='<input name="wp_contact_prenom" type="text">';
+    }
+    if(get_option('radio_btn_Date') == 'true')
+    {
+        $form .='<br><label for="">Date de naissance</label><br>';
+        $form .='<input name="wp_contact_date" type="date" name="" id="" >';
+    }
+    if(get_option('radio_btn_Email') == 'true')
+    {
+        $form .='<br><label for=""> E-mail</label><br>';
+        $form .='<input name="wp_contact_email" type="email">';
+    }
+    if(get_option('radio_btn_Numero') == 'true')
+    {
+        $form .='<br><label for=""> Numero du téléphone</label><br>';
+        $form .='<input name="wp_contact_numero" type="number">';
+    }
+    if(get_option('radio_btn_Message') == 'true')
+    {
+        $form .='<br><label for="">Message</label><br>';
+        $form .='<textarea name="wp_contact_message" type="text"></textarea>';
+    }
+    $form .='</form>';
+    echo $form;
+}
+
+ add_shortcode('affichage_form','affichage_inputs');
+ 
    ?>
    <style>
+       label
+       {
+        font-size:20px !important;
+        font-weight:bold !important;
+        font-family: "Inter var", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, sans-serif !important;
+       }
        .updated
        {    
         margin-left:13em !important;
         background-color:#cee6d4 !important;
-        color: #000!important;
 
        }
       #submit_btn_id
